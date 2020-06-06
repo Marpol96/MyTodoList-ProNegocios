@@ -6,6 +6,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,6 +21,9 @@ public class MainActivity extends AppCompatActivity {
     //creamos shareprefences
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
+
+    //crear coleccion de tareas
+    private JSONArray TodoListStore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +38,32 @@ public class MainActivity extends AppCompatActivity {
         preferences = getSharedPreferences(  "MyTODOList", MODE_PRIVATE);
         editor = preferences.edit();
 
-        TituloTxt.setText(preferences.getString("Titulo", ""));
+        try {
+            TodoListStore = new JSONArray(preferences.getString("data","[]"));
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
     }
 
-    public void onClickAgregar(View view){
+    public void onClickAgregar(View view) throws JSONException{
+        String Title = TituloTxt.getText().toString();
+        String Desc = DescTxt.getText().toString();
+
+        JSONObject TodoListItem = new JSONObject();
+
+
+        TodoListItem.put(Title,Desc);
+        TodoListStore.put(TodoListItem);
+
         //programacion del boton
-        editor.putString("Titulo",TituloTxt.getText().toString());
+        editor.putString("data",TituloTxt.getText().toString());
         editor.commit();
+
+        TituloTxt.setText("");
+        DescTxt.setText("");
+
+        Toast.makeText(this,"Tarea Agregada Exitosamente",Toast.LENGTH_SHORT).show();
+
+        System.out.println(TodoListStore.toString());
     }
 }
