@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TodoList</string>
+    <string name="contentDescription">Logo De MYTodoList</string>
+    <string name="text_titulo">Titulo</string>
+    <string name="descripcion">Descripcion</string>
+    <string name="agregar">AGREGAR</string>
+</resources>
